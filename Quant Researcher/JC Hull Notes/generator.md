@@ -1,140 +1,1247 @@
-### 5.5 Forward Price with Known Income
-Many investment assets generate predictable cash income, such as stocks paying dividends or bonds paying coupons. The pricing formula must be adjusted to account for this income.
+# 6.3 Eurodollar Futures
 
-#### The Argument
-If you buy the asset today, you receive the income. If you buy a forward contract, you *do not* receive the income paid during the life of the contract. Therefore, the forward price must be lower to reflect this missed income.
-*   We define \( I \) as the **present value** of all income payments expected during the life of the forward contract.
-*   We subtract \( I \) from the spot price \( S_0 \) to get the "net" cost of the asset.
+The most popular interest rate futures contract in the United States is the **three-month Eurodollar futures contract** traded on the CME Group.
 
-#### The Formula
-For an investment asset providing a known cash income with present value \( I \):
-\[ F_0 = (S_0 - I)e^{rT} \]
+A **Eurodollar** is:
 
-#### Arbitrage Example
-*   **Asset Price (\(S_0\)):** $900
-*   **Income:** $40 coupon in 4 months.
-*   **Interest Rates:** 3% (4-month) and 4% (9-month).
-*   **Maturity:** 9 months.
+- A US dollar deposit
+- Held in a bank outside the United States
 
-1.  **Calculate PV of Income (\(I\)):**
-    \[ I = 40e^{-0.03 \times (4/12)} = \$39.60 \]
-2.  **Calculate No-Arbitrage Price:**
-    \[ F_0 = (900 - 39.60)e^{0.04 \times 0.75} = 860.40e^{0.03} = \$886.60 \]
+The Eurodollar interest rate is essentially the same as:
 
-If \(F_0 > \$886.60\), arbitrageurs profit by **buying the asset** and **shorting the forward**. (They receive the coupon to help pay borrowing costs).
-If \(F_0 < \$886.60\), arbitrageurs profit by **shorting the asset** and **buying the forward**. (They invest the short proceeds to cover the coupon payment they owe).
+# LIBOR (London Interbank Offered Rate)
 
-***
+It represents the interest rate at which banks lend US dollars to one another.
 
-This is a very common point of confusion! The intuition is actually the opposite of what you might expect.
+---
 
+# Nature of the Eurodollar Futures Contract
 
-Here is the step-by-step breakdown of why the formula is \( F_0 = (S_0 - I)e^{rT} \).
+A three-month Eurodollar futures contract is:
 
-### 1. The "Stock Price Drop" Mechanism
-When a stock pays a dividend, the stock price generally **drops** by the amount of that dividend.
+> A futures contract on the interest rate that will apply to a \$1 million deposit for a future three-month period.
 
-*   Imagine a stock is $100.
-*   It pays a $5 dividend tomorrow.
-*   Tomorrow, the stock will trade at roughly \$95. (Because the company just gave away $5 of value per share).
+The contract allows traders to:
 
-The **Forward Price** is a prediction of what the stock price will be in the future. Since the stock price is going to drop by $5 when the dividend is paid, the Forward price must account for that drop.
+- Speculate on future short-term interest rates
+- Hedge future borrowing/lending costs
+- Construct the LIBOR zero curve
+- Manage money-market exposure
 
-### 2. The Arbitrage Argument (The "Net Cost" View)
-Let's look at the cost of acquiring the stock at time \(T\) using two different methods. To prevent arbitrage, these two costs must be equal.
+---
 
-**Method A: Buy the Forward**
-*   You enter a contract to buy the stock at time \(T\).
-*   **Cost at time T:** \( F_0 \)
+# Contract Characteristics
 
-**Method B: Buy the Stock Now (and borrow money to do it)**
-*   You borrow money to buy the stock today at price \( S_0 \).
-*   However, you know you will receive a dividend (Income) during this time.
-*   You can use that dividend to pay back part of your loan.
-*   Therefore, you don't need to borrow the full \( S_0 \). You only need to borrow the **Net Cost**: \( S_0 - I \).
-*   The bank charges you interest on this borrowed amount.
-*   **Cost at time T:** \( (S_0 - I)e^{rT} \)
+## Underlying
 
-**Conclusion:**
-Since Method A and Method B both result in you owning the stock at time \(T\), their costs must be equal:
-\[ F_0 = (S_0 - I)e^{rT} \]
+- Interest on \$1 million for 3 months
 
-### 3. A Numerical Example
-Let's look at why your intuition ("S + I") would lead to free money (arbitrage) for someone else.
+## Contract Months
 
-*   **Stock Price (\(S_0\)):** $100
-*   **Dividend (PV):** $5 (Paid just before maturity)
-*   **Interest Rate:** 0% (to keep it simple).
+Available maturities:
 
-**Scenario 1 (Correct Formula):**
-The Forward Price should be \( 100 - 5 = \$95 \).
-*   Why? Because at maturity, the stock will likely be $95 (after the dividend drop).
+- March
+- June
+- September
+- December
 
-**Scenario 2 (If we added, like you suggested):**
-Suppose the Forward Price was **\$105** ($100 + $5).
-*   **My Strategy:**
-    1.  I buy the stock now for $100.
-    2.  I short the forward (agree to sell it to you for $105).
-    3.  I wait. I receive the \$5 dividend. (Now I have $5 cash + Stock).
-    4.  At maturity, I sell you the stock for \$105 (per the contract).
-*   **My Total Profit:** \$105 (from you) + \$5 (dividend) - \$100 (cost) = **$10 Profit**.
-*   This is "free money" (arbitrage). The market would never allow this. The price would be forced down.
+Contracts may extend:
 
-### Summary
-You subtract \(I\) because the **Forward price predicts the future stock price**, and the future stock price decreases every time a dividend is paid out.
+- Up to 10 years into the future
 
-### 5.6 Forward Price with Known Yield
-Instead of fixed cash amounts (like $40), some assets pay income as a percentage of the asset's price (yield). This is common for currencies or stock indices.
-*   **Notation:** \( q \) is the average annual yield (continuously compounded).
+Thus traders can take positions on future interest rates many years ahead.
 
-#### The Formula
-Since the income scales with the asset price, we adjust the growth rate in the exponent:
-\[ F_0 = S_0 e^{(r-q)T} \]
+---
 
-*   **Logic:** The asset yields \(q\), which offsets the cost of carry \(r\). The net cost of holding the asset is \(r - q\).
+# Final Settlement
 
-#### Example
-*   **Asset Price:** $25
-*   **Risk-Free Rate (\(r\)):** 10%
-*   **Dividend Yield:** 4% semiannually \(\rightarrow\) 3.96% continuous (\(q = 0.0396\)).
-*   **Maturity:** 6 months (0.5 years).
-    \[ F_0 = 25 e^{(0.10 - 0.0396) \times 0.5} = 25 e^{0.0302} = \$25.77 \]
+The final settlement occurs:
 
-***
+- Two business days before the third Wednesday of the delivery month
 
-### 5.7 Valuing Forward Contracts
-It is crucial to distinguish between the **Forward Price (\(F_0\))** and the **Value of the Contract (\(f\))**.
-*   **At Inception:** The delivery price \(K\) is set equal to the current forward price \(F_0\). Therefore, the value \(f\) is **zero**.
-*   **Later:** As time passes, the market forward price \(F_0\) changes, but your contracted delivery price \(K\) stays fixed. The contract now has positive or negative value.
+At settlement:
 
-#### General Valuation Formula
-The value of a **long** forward contract (agreement to buy at \(K\)) is the present value of the difference between the current forward price and the delivery price:
-\[ f = (F_0 - K)e^{-rT} \]
+$$
+\text{Final Settlement Price} = 100 - R
+$$
 
-**Alternative Forms (Substituting \(F_0\)):**
-*   **No Income:** \( f = S_0 - Ke^{-rT} \)
-*   **Known Cash Income:** \( f = S_0 - I - Ke^{-rT} \)
-*   **Known Yield:** \( f = S_0 e^{-qT} - Ke^{-rT} \)
+Where:
 
-#### Mark-to-Market: Forwards vs. Futures
-*   **Futures:** Gains/losses are settled daily. If the price moves by \$1, you get $1 immediately.
-*   **Forwards:** Gains/losses are realized only at maturity. If the price moves by \$1, your profit is the **present value** of $1 discounted from maturity to today.
+- \(R\) = 3-month LIBOR fixing
+- Expressed with:
+  - Quarterly compounding
+  - Actual/360 day count convention
 
-***
+---
 
-### 5.8 Forward vs. Futures Prices
-Are forward prices and futures prices theoretically identical?
-*   **Constant Interest Rates:** Yes. If \(r\) is constant, \(F_{forward} = F_{futures}\).
-*   **Stochastic Interest Rates:** No, they diverge slightly due to daily settlement (marking to market).
+# Example — Final Settlement
 
-#### Correlation Argument
-The difference depends on the correlation between the **Asset Price (\(S\))** and **Interest Rates (\(r\))**.
-1.  **Positive Correlation:**
-    *   When \(S\) rises, you make a profit on futures. Since \(r\) likely rose too, you reinvest that profit at a *higher* rate.
-    *   When \(S\) falls, you lose money. Since \(r\) likely fell, you finance that loss at a *lower* rate.
-    *   *Result:* Futures are more attractive \(\rightarrow\) **Futures Price > Forward Price**.
-2.  **Negative Correlation:**
-    *   The opposite happens. You lose money when rates are high and make money when rates are low.
-    *   *Result:* Forward contracts are more attractive \(\rightarrow\) **Forward Price > Futures Price**.
+Suppose:
 
-*Practical Note:* For most short-term contracts (months), the difference is negligible, and we assume \(F_{forward} = F_{futures}\). The major exception is **Eurodollar Futures** (discussed in Chapter 6), where the difference is significant.
+- Final LIBOR fixing = 0.75%
+
+Then:
+
+$$
+100 - 0.75 = 99.250
+$$
+
+Thus:
+
+# Final settlement price = 99.250
+
+After final settlement:
+
+- All contracts are closed
+
+---
+
+# Price Quotation Convention
+
+Eurodollar futures are quoted as:
+
+$$
+100 - \text{Interest Rate}
+$$
+
+This means:
+
+| Futures Quote | Implied Interest Rate |
+|---|---|
+| 99.725 | 0.275% |
+| 97.400 | 2.600% |
+| 96.500 | 3.500% |
+
+---
+
+# Important Intuition
+
+Because the quote is:
+
+$$
+100 - R
+$$
+
+there is an inverse relationship between:
+
+- Interest rates
+- Futures prices
+
+---
+
+# Relationship Between Futures Price and Interest Rates
+
+## If Interest Rates Rise
+
+- Futures prices fall
+
+## If Interest Rates Fall
+
+- Futures prices rise
+
+Therefore:
+
+| Position | Profits When |
+|---|---|
+| Long Futures | Rates fall |
+| Short Futures | Rates rise |
+
+---
+
+# One Basis Point Rule
+
+A very important feature of Eurodollar futures:
+
+# A one-basis-point move equals \$25 per contract
+
+---
+
+# Why?
+
+A basis point:
+
+$$
+0.01\% = 0.0001
+$$
+
+Contract principal:
+
+$$
+\$1,000,000
+$$
+
+Three-month period:
+
+$$
+0.25 \text{ years}
+$$
+
+Interest change:
+
+$$
+1,000,000 \times 0.0001 \times 0.25
+=
+25
+$$
+
+Thus:
+
+# 1 basis point = \$25
+
+---
+
+# Trading Profit and Loss
+
+## If Quote Increases by 1 Basis Point
+
+- Long gains \$25
+- Short loses \$25
+
+## If Quote Decreases by 1 Basis Point
+
+- Long loses \$25
+- Short gains \$25
+
+---
+
+# Example — Daily Gain/Loss
+
+Suppose settlement price changes:
+
+$$
+99.725 \rightarrow 99.685
+$$
+
+Difference:
+
+$$
+0.040
+=
+4 \text{ basis points}
+$$
+
+Loss to long position:
+
+$$
+4 \times 25
+=
+\$100
+$$
+
+Gain to short position:
+
+$$
+\$100
+$$
+
+---
+
+# Contract Price Formula
+
+Hull defines the contract price as:
+
+$$
+10,000
+\left[
+100 - 0.25(100-Q)
+\right]
+$$
+
+Where:
+
+- \(Q\) = futures quote
+
+---
+
+# Example — Contract Price
+
+Suppose:
+
+$$
+Q = 99.725
+$$
+
+Then:
+
+$$
+10,000
+\left[
+100 - 0.25(100-99.725)
+\right]
+$$
+
+$$
+=
+10,000
+\left[
+100 - 0.25(0.275)
+\right]
+$$
+
+$$
+=
+10,000(99.93125)
+$$
+
+$$
+=
+999,312.5
+$$
+
+Thus:
+
+# Contract Price = \$999,312.50
+
+---
+
+# Example — Final Contract Value
+
+Suppose final quote becomes:
+
+$$
+99.615
+$$
+
+Then:
+
+$$
+10,000
+\left[
+100 - 0.25(100-99.615)
+\right]
+$$
+
+$$
+=
+999,037.5
+$$
+
+Difference:
+
+$$
+999,312.5 - 999,037.5
+=
+275
+$$
+
+Thus:
+
+# Long position loses \$275
+
+---
+
+# Hedging with Eurodollar Futures
+
+Eurodollar futures are widely used for:
+
+- Hedging future investments
+- Locking future borrowing rates
+- Locking future lending rates
+
+---
+
+# Example 6.3 — Locking in an Interest Rate
+
+Suppose an investor wants to lock in the interest rate for:
+
+- A future 3-month investment
+- Principal = \$100 million
+
+Current September Eurodollar futures quote:
+
+$$
+96.50
+$$
+
+Implied interest rate:
+
+$$
+100 - 96.50
+=
+3.5\%
+$$
+
+The investor buys:
+
+# 100 contracts
+
+---
+
+# Suppose Actual Future Rate Becomes 2.6%
+
+Final settlement price:
+
+$$
+100 - 2.6
+=
+97.40
+$$
+
+Price movement:
+
+$$
+97.40 - 96.50
+=
+0.90
+=
+90 \text{ basis points}
+$$
+
+---
+
+# Profit on Futures Position
+
+Each basis point:
+
+$$
+\$25
+$$
+
+Therefore:
+
+$$
+100 \times 25 \times 90
+$$
+
+$$
+=
+225,000
+$$
+
+Thus:
+
+# Futures profit = \$225,000
+
+---
+
+# Interest Earned on Investment
+
+Actual investment return:
+
+$$
+100,000,000
+\times
+0.25
+\times
+0.026
+$$
+
+$$
+=
+650,000
+$$
+
+---
+
+# Total Effective Return
+
+$$
+650,000 + 225,000
+=
+875,000
+$$
+
+Equivalent interest rate:
+
+$$
+100,000,000
+\times
+0.25
+\times
+0.035
+=
+875,000
+$$
+
+Thus:
+
+# Effective locked-in rate = 3.5%
+
+---
+
+# Important Reality — Hedge Is Not Perfect
+
+Hull explains that the hedge is not exactly perfect because:
+
+## 1. Futures Are Settled Daily
+
+Cash flows occur every day via marking to market.
+
+## 2. Timing Mismatch Exists
+
+- Futures settle in September
+- Actual investment interest received in December
+
+This creates reinvestment risk.
+
+---
+
+# Hedge Adjustment
+
+Hull suggests an approximate adjustment:
+
+$$
+\frac{1}{1 + 0.035 \times 0.25}
+=
+0.9913
+$$
+
+Adjusted contracts:
+
+$$
+100 \times 0.9913
+=
+99
+$$
+
+Thus:
+
+# Use 99 contracts instead of 100
+
+---
+
+# Eurodollar Futures and the Yield Curve
+
+Eurodollar futures provide information about:
+
+- Future LIBOR expectations
+- Interest rate term structure
+
+Example from Hull:
+
+| Future Date | Futures Rate |
+|---|---|
+| June 2013 | 0.275% |
+| September 2013 | 0.295% |
+| December 2013 | 0.325% |
+| December 2015 | 0.900% |
+| December 2017 | 2.270% |
+| December 2019 | 3.324% |
+
+This indicates:
+
+# An upward-sloping yield curve
+
+Meaning:
+
+- Long-term interest rates are higher than short-term rates.
+
+---
+
+# Forward Rates vs Futures Rates
+
+Eurodollar futures resemble:
+
+# Forward Rate Agreements (FRAs)
+
+because both lock in future interest rates.
+
+---
+
+# Important Difference Between FRAs and Futures
+
+## Eurodollar Futures
+
+- Settled daily
+- Final settlement at time \(T_1\)
+
+## FRA
+
+- No daily settlement
+- Settlement occurs at time \(T_2\)
+
+---
+
+# Two Major Differences
+
+## 1. Daily Settlement Effect
+
+Daily settlement creates cash flows during the contract life.
+
+This changes contract value because:
+
+- Gains occur when rates move favorably
+- Margin cash can earn interest
+
+This creates:
+
+# Convexity Bias
+
+---
+
+## 2. Timing of Settlement
+
+Futures:
+
+- Settled earlier
+
+FRAs:
+
+- Payoff occurs later
+
+Because of time value of money:
+
+- Futures rates tend to exceed forward rates.
+
+---
+
+# Convexity Adjustment
+
+Hull gives the convexity adjustment formula:
+
+$$
+\text{Forward Rate}
+=
+\text{Futures Rate}
+-
+\frac{1}{2}\sigma^2 T_1 T_2
+$$
+
+Where:
+
+- \(\sigma\) = volatility of short-term rates
+- \(T_1\) = maturity of futures contract
+- \(T_2\) = maturity of underlying rate
+
+---
+
+# Key Insight
+
+Convexity adjustment:
+
+- Reduces futures rate
+- Produces estimated forward rate
+
+---
+
+# Example 6.4 — Convexity Adjustment
+
+Suppose:
+
+$$
+\sigma = 0.012
+$$
+
+8-year Eurodollar futures quote:
+
+$$
+94
+$$
+
+Implied futures rate:
+
+$$
+6\%
+$$
+
+Given:
+
+$$
+T_1 = 8
+$$
+
+$$
+T_2 = 8.25
+$$
+
+---
+
+# Calculate Adjustment
+
+$$
+\frac{1}{2}(0.012)^2(8)(8.25)
+$$
+
+$$
+=
+0.00475
+$$
+
+Thus:
+
+$$
+0.475\%
+=
+47.5 \text{ basis points}
+$$
+
+---
+
+# Forward Rate Estimate
+
+Continuous-compounding futures rate:
+
+$$
+6.038\%
+$$
+
+Adjusted forward rate:
+
+$$
+6.038 - 0.475
+$$
+
+$$
+=
+5.563\%
+$$
+
+Thus:
+
+# Forward rate = 5.563%
+
+---
+
+# Important Observation
+
+Hull notes:
+
+# Convexity adjustment grows rapidly with maturity
+
+| Maturity | Adjustment |
+|---|---|
+| 2 years | 3.2 bps |
+| 4 years | 12.2 bps |
+| 6 years | 27.0 bps |
+| 8 years | 47.5 bps |
+| 10 years | 73.8 bps |
+
+Observation:
+
+- Adjustment approximately grows with:
+  
+$$
+T^2
+$$
+
+---
+
+# Using Eurodollar Futures to Build the LIBOR Zero Curve
+
+Eurodollar futures are frequently used to extend:
+
+# The LIBOR zero curve
+
+---
+
+# Basic Idea
+
+Known:
+
+- Short-term LIBOR rates
+
+Need:
+
+- Longer-term zero rates
+
+Eurodollar futures provide:
+
+- Forward rates
+
+These forward rates are bootstrapped into zero rates.
+
+---
+
+# Relationship Between Forward and Zero Rates
+
+Hull derives:
+
+$$
+F_i
+=
+\frac{R_{i+1}T_{i+1} - R_iT_i}
+{T_{i+1}-T_i}
+$$
+
+Rearranging:
+
+$$
+R_{i+1}
+=
+\frac{
+F_i(T_{i+1}-T_i)
++
+R_iT_i
+}
+{T_{i+1}}
+$$
+
+---
+
+# Example 6.5 — Bootstrapping Zero Rates
+
+Suppose:
+
+400-day zero rate:
+
+$$
+4.80\%
+$$
+
+Forward rate for next 91 days:
+
+$$
+5.30\%
+$$
+
+---
+
+# Compute 491-Day Zero Rate
+
+$$
+\frac{
+0.053 \times 91
++
+0.048 \times 400
+}
+{491}
+$$
+
+$$
+=
+0.04893
+$$
+
+Thus:
+
+# 491-day zero rate = 4.893%
+
+---
+
+# Compute 589-Day Zero Rate
+
+Next forward rate:
+
+$$
+5.50\%
+$$
+
+Then:
+
+$$
+\frac{
+0.055 \times 98
++
+0.04893 \times 491
+}
+{589}
+$$
+
+$$
+=
+0.04994
+$$
+
+Thus:
+
+# 589-day zero rate = 4.994%
+
+---
+
+# 6.4 Duration-Based Hedging Strategies Using Futures
+
+Duration is extremely important in interest rate risk management.
+
+Suppose:
+
+- A bond portfolio is being hedged
+- Using interest rate futures
+
+Define:
+
+| Symbol | Meaning |
+|---|---|
+| \(V_F\) | Futures contract value |
+| \(D_F\) | Duration of underlying futures asset |
+| \(P\) | Portfolio value |
+| \(D_P\) | Portfolio duration |
+
+---
+
+# Duration Approximation
+
+For small yield changes:
+
+$$
+\Delta P
+=
+- P D_P \Delta y
+$$
+
+Similarly:
+
+$$
+\Delta V_F
+=
+- V_F D_F \Delta y
+$$
+
+---
+
+# Duration-Based Hedge Ratio
+
+Equating sensitivities gives:
+
+$$
+N
+=
+\frac{P D_P}
+{V_F D_F}
+$$
+
+Where:
+
+- \(N\) = number of futures contracts
+
+This is called:
+
+# Duration-Based Hedge Ratio
+
+or
+
+# Price Sensitivity Hedge Ratio
+
+---
+
+# Important Assumption
+
+This approach assumes:
+
+# Parallel shifts in the yield curve
+
+Meaning:
+
+- All interest rates move equally
+
+This is a major limitation.
+
+---
+
+# Choosing the Correct Futures Contract
+
+The hedger tries to choose futures contracts where:
+
+$$
+D_F \approx D_P
+$$
+
+---
+
+# Typical Usage
+
+| Futures Type | Usage |
+|---|---|
+| Eurodollar Futures | Short-term rates |
+| Treasury Bond Futures | Long-term rates |
+| Treasury Note Futures | Medium-term rates |
+
+---
+
+# Important Direction Rule
+
+## If Rates Rise
+
+- Bond prices fall
+- Futures prices fall
+
+## If Rates Fall
+
+- Bond prices rise
+- Futures prices rise
+
+---
+
+# Hedging Rule
+
+| Exposure | Hedge |
+|---|---|
+| Lose when rates rise | Short futures |
+| Lose when rates fall | Long futures |
+
+---
+
+# Example 6.6 — Duration Hedge
+
+Suppose:
+
+Portfolio value:
+
+$$
+\$10,000,000
+$$
+
+Portfolio duration:
+
+$$
+6.80
+\text{ years}
+$$
+
+Current futures price:
+
+$$
+93-02 = 93.0625
+$$
+
+Contract value:
+
+$$
+93,062.50
+$$
+
+CTD bond duration:
+
+$$
+9.20
+\text{ years}
+$$
+
+---
+
+# Calculate Contracts
+
+$$
+N
+=
+\frac{
+10,000,000
+\times
+6.80
+}
+{
+93,062.50
+\times
+9.20
+}
+$$
+
+$$
+=
+79.42
+$$
+
+Thus:
+
+# Short 79 futures contracts
+
+---
+
+# Why Short Futures?
+
+If rates rise:
+
+- Bond portfolio loses value
+- Short futures gains value
+
+If rates fall:
+
+- Bond portfolio gains value
+- Short futures loses value
+
+Thus hedge offsets interest-rate risk.
+
+---
+
+# Cheapest-to-Deliver Risk
+
+In Treasury bond futures:
+
+- Multiple deliverable bonds exist
+
+The hedger assumes one bond will be CTD.
+
+If market conditions change:
+
+- Another bond may become CTD
+
+This weakens hedge effectiveness.
+
+---
+
+# Business Snapshot — Asset Liability Management (ALM)
+
+Banks carefully manage interest-rate exposure using:
+
+# Asset Liability Management (ALM)
+
+---
+
+# GAP Management
+
+Banks divide the yield curve into:
+
+# Buckets
+
+Examples:
+
+- 0–1 month
+- 1–3 months
+- 3–6 months
+
+Banks analyze:
+
+- How portfolio value changes when one bucket shifts.
+
+---
+
+# Tools Used by Banks
+
+Banks use:
+
+- Swaps
+- FRAs
+- Bond futures
+- Eurodollar futures
+- Other interest-rate derivatives
+
+---
+
+# 6.5 Hedging Portfolios of Assets and Liabilities
+
+Financial institutions often hedge by matching:
+
+- Duration of assets
+- Duration of liabilities
+
+This is called:
+
+# Duration Matching
+
+or
+
+# Portfolio Immunization
+
+---
+
+# Objective of Immunization
+
+Protect against:
+
+# Small parallel shifts in interest rates
+
+---
+
+# How It Works
+
+If:
+
+$$
+\text{Asset Duration}
+=
+\text{Liability Duration}
+$$
+
+then:
+
+- Gain on assets offsets loss on liabilities
+- Portfolio becomes less sensitive to rates
+
+---
+
+# Limitation of Duration Matching
+
+Duration matching only protects against:
+
+# Parallel yield curve shifts
+
+In reality:
+
+- Short-term rates are more volatile
+- Long-term rates move differently
+
+Sometimes:
+
+- Short rates rise
+- Long rates fall
+
+Therefore:
+
+# Duration matching is only a first approximation
+
+---
+
+# Summary of Chapter Concepts
+
+## Treasury Bond Futures
+
+Important delivery options:
+
+1. Delivery timing option
+2. Choice of deliverable bond
+3. Wild card option
+
+These options:
+
+# Reduce futures price
+
+---
+
+# Eurodollar Futures
+
+- Based on future 3-month LIBOR
+- Quoted as:
+  
+$$
+100 - R
+$$
+
+- Used for:
+  - Hedging
+  - Speculation
+  - Yield curve construction
+
+---
+
+# Convexity Adjustment
+
+Necessary because:
+
+- Futures ≠ forward contracts
+
+Adjustment:
+
+$$
+\text{Forward Rate}
+=
+\text{Futures Rate}
+-
+\frac{1}{2}\sigma^2T_1T_2
+$$
+
+---
+
+# Duration Hedging
+
+Hedge ratio:
+
+$$
+N
+=
+\frac{PD_P}{V_FD_F}
+$$
+
+Purpose:
+
+- Protect against interest-rate changes
+
+---
+
+# Core Intuition of Entire Chapter
+
+This chapter connects:
+
+- Futures pricing
+- Bond sensitivity
+- LIBOR markets
+- Hedging
+- Yield curves
+- Duration management
+
+Key ideas:
+
+1. Interest rates and bond prices move inversely.
+2. Eurodollar futures dominate short-term interest-rate trading.
+3. Treasury futures contain embedded delivery options.
+4. Duration measures interest-rate sensitivity.
+5. Hedging works best under parallel yield-curve shifts.
+6. Convexity adjustment is necessary when using futures to estimate forward rates.
