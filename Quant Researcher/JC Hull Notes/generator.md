@@ -1,97 +1,140 @@
-# 📝 Chapter 3: Hedging Strategies Using Futures - Comprehensive Summary
+### 5.5 Forward Price with Known Income
+Many investment assets generate predictable cash income, such as stocks paying dividends or bonds paying coupons. The pricing formula must be adjusted to account for this income.
 
-This chapter explored the core purpose of futures markets: to provide mechanisms for companies and investors to **reduce or offset specific price risks** (exposures) they face in their primary business activities.
+#### The Argument
+If you buy the asset today, you receive the income. If you buy a forward contract, you *do not* receive the income paid during the life of the contract. Therefore, the forward price must be lower to reflect this missed income.
+*   We define \( I \) as the **present value** of all income payments expected during the life of the forward contract.
+*   We subtract \( I \) from the spot price \( S_0 \) to get the "net" cost of the asset.
 
-## I. Basic Hedging Principles
+#### The Formula
+For an investment asset providing a known cash income with present value \( I \):
+\[ F_0 = (S_0 - I)e^{rT} \]
 
-The goal of hedging is to take a position in the futures market whose gains/losses offset the losses/gains in the real world (spot market), locking in a desired price or cost.
+#### Arbitrage Example
+*   **Asset Price (\(S_0\)):** $900
+*   **Income:** $40 coupon in 4 months.
+*   **Interest Rates:** 3% (4-month) and 4% (9-month).
+*   **Maturity:** 9 months.
 
-### A. Types of Hedges
+1.  **Calculate PV of Income (\(I\)):**
+    \[ I = 40e^{-0.03 \times (4/12)} = \$39.60 \]
+2.  **Calculate No-Arbitrage Price:**
+    \[ F_0 = (900 - 39.60)e^{0.04 \times 0.75} = 860.40e^{0.03} = \$886.60 \]
 
-| Hedge Type | Futures Position | When Appropriate (Your Exposure) |
-| :--- | :--- | :--- |
-| **Short Hedge** | **Sell** futures contracts (Short Position) | When the company **gains if the asset price increases** and **loses if the asset price decreases** (e.g., you own the asset and plan to sell it later). |
-| **Long Hedge** | **Buy** futures contracts (Long Position) | When the company **loses if the asset price increases** and **gains if the asset price decreases** (e.g., you need to buy the asset later). |
+If \(F_0 > \$886.60\), arbitrageurs profit by **buying the asset** and **shorting the forward**. (They receive the coupon to help pay borrowing costs).
+If \(F_0 < \$886.60\), arbitrageurs profit by **shorting the asset** and **buying the forward**. (They invest the short proceeds to cover the coupon payment they owe).
 
-## II. Arguments for and Against Hedging
+***
 
-While risk reduction should be universally welcomed, companies often face practical and theoretical resistance to hedging.
+This is a very common point of confusion! The intuition is actually the opposite of what you might expect.
 
-### A. Reasons Why Companies Hedge (Pro)
 
-* **Focus on Core Competency:** Allows management to concentrate on their primary business (manufacturing, service delivery) rather than speculating on financial or commodity price variables (e.g., interest rates, exchange rates).
-* **Avoid Surprises:** Stabilizes cash flow and profit margins by eliminating exposure to sharp, adverse price movements.
+Here is the step-by-step breakdown of why the formula is \( F_0 = (S_0 - I)e^{rT} \).
 
-### B. Reasons Why Companies May Not Hedge (Con)
+### 1. The "Stock Price Drop" Mechanism
+When a stock pays a dividend, the stock price generally **drops** by the amount of that dividend.
 
-* **Shareholder Diversification (Theoretical):** Shareholders holding well-diversified portfolios have already eliminated much of the company's systematic risk. They may not require the company to hedge the same risk.
-* **Competitive Risk (Practical):** If a company hedges but its competitors do not, the hedged company's profit margin may actually **fluctuate more** than its competitors' margins, making it appear risky in the short term.
-* **Executive Criticism (Internal Risk):** If the price of the underlying asset moves favorably (i.e., the company makes a gain on the asset), the corresponding loss on the futures hedge may draw criticism from management or shareholders who do not understand the strategy's purpose.
+*   Imagine a stock is $100.
+*   It pays a $5 dividend tomorrow.
+*   Tomorrow, the stock will trade at roughly \$95. (Because the company just gave away $5 of value per share).
 
-## III. Managing Basis Risk
+The **Forward Price** is a prediction of what the stock price will be in the future. Since the stock price is going to drop by $5 when the dividend is paid, the Forward price must account for that drop.
 
-An important reality is that perfect hedges are rare, primarily due to **Basis Risk**.
+### 2. The Arbitrage Argument (The "Net Cost" View)
+Let's look at the cost of acquiring the stock at time \(T\) using two different methods. To prevent arbitrage, these two costs must be equal.
 
-### A. Definition of Basis
+**Method A: Buy the Forward**
+*   You enter a contract to buy the stock at time \(T\).
+*   **Cost at time T:** \( F_0 \)
 
-The basis is the difference between the asset's price in the real world and the price of the hedging contract:
+**Method B: Buy the Stock Now (and borrow money to do it)**
+*   You borrow money to buy the stock today at price \( S_0 \).
+*   However, you know you will receive a dividend (Income) during this time.
+*   You can use that dividend to pay back part of your loan.
+*   Therefore, you don't need to borrow the full \( S_0 \). You only need to borrow the **Net Cost**: \( S_0 - I \).
+*   The bank charges you interest on this borrowed amount.
+*   **Cost at time T:** \( (S_0 - I)e^{rT} \)
 
-$$\text{Basis} (b) = \text{Spot Price of Asset to be Hedged} (S) - \text{Futures Price of Contract Used} (F)$$
+**Conclusion:**
+Since Method A and Method B both result in you owning the stock at time \(T\), their costs must be equal:
+\[ F_0 = (S_0 - I)e^{rT} \]
 
-### B. Basis Risk
+### 3. A Numerical Example
+Let's look at why your intuition ("S + I") would lead to free money (arbitrage) for someone else.
 
-**Basis Risk** is the uncertainty surrounding the **value of the basis** at the time the hedge is closed out.
+*   **Stock Price (\(S_0\)):** $100
+*   **Dividend (PV):** $5 (Paid just before maturity)
+*   **Interest Rate:** 0% (to keep it simple).
 
-* **Impact:** The final effective price received or paid is **$F_{initial} + b_{final}$**. Since $F_{initial}$ is known, the final basis ($b_{final}$) is the source of residual risk.
-* **Causes:** The two prices (Spot and Futures) may not move perfectly together due to:
-    1.  The hedging asset being different from the underlying asset (**Cross Hedging**).
-    2.  The futures contract being closed out before its delivery month.
+**Scenario 1 (Correct Formula):**
+The Forward Price should be \( 100 - 5 = \$95 \).
+*   Why? Because at maturity, the stock will likely be $95 (after the dividend drop).
 
-## IV. Optimal Hedging and Quantification
+**Scenario 2 (If we added, like you suggested):**
+Suppose the Forward Price was **\$105** ($100 + $5).
+*   **My Strategy:**
+    1.  I buy the stock now for $100.
+    2.  I short the forward (agree to sell it to you for $105).
+    3.  I wait. I receive the \$5 dividend. (Now I have $5 cash + Stock).
+    4.  At maturity, I sell you the stock for \$105 (per the contract).
+*   **My Total Profit:** \$105 (from you) + \$5 (dividend) - \$100 (cost) = **$10 Profit**.
+*   This is "free money" (arbitrage). The market would never allow this. The price would be forced down.
 
-### A. The Hedge Ratio
+### Summary
+You subtract \(I\) because the **Forward price predicts the future stock price**, and the future stock price decreases every time a dividend is paid out.
 
-The **Hedge Ratio ($h$ or $h^*$ )** is the ratio of the size of the futures position to the size of the exposure ($\frac{\text{Size of Futures Position}}{\text{Size of Exposure}}$).
+### 5.6 Forward Price with Known Yield
+Instead of fixed cash amounts (like $40), some assets pay income as a percentage of the asset's price (yield). This is common for currencies or stock indices.
+*   **Notation:** \( q \) is the average annual yield (continuously compounded).
 
-* If the assets are identical, the hedge ratio is often $1.0$.
-* **Minimum Variance Hedge Ratio ($h^*$):** When assets are different (**Cross Hedging**), the optimal $h^*$ minimizes the variance (risk) of the final hedged position.
-    * $h^*$ is calculated as the **slope of the best-fit line** obtained by regressing daily changes in the spot price ($\Delta S$) against daily changes in the futures price ($\Delta F$).
-    $$
-    h^* = \rho \frac{\sigma_S}{\sigma_F}
-    $$
-* **Optimal Number of Contracts ($N$):** Once $h^*$ is found, the number of contracts is:
-    $$
-    N = \frac{h^* \times \text{Exposure Quantity} (Q_A)}{\text{Futures Contract Size} (Q_F)}
-    $$
+#### The Formula
+Since the income scales with the asset price, we adjust the growth rate in the exponent:
+\[ F_0 = S_0 e^{(r-q)T} \]
 
-## V. Stock Index Futures for Equity Hedging
+*   **Logic:** The asset yields \(q\), which offsets the cost of carry \(r\). The net cost of holding the asset is \(r - q\).
 
-Stock index futures are essential for managing **systematic risk** (market risk) in stock portfolios.
+#### Example
+*   **Asset Price:** $25
+*   **Risk-Free Rate (\(r\)):** 10%
+*   **Dividend Yield:** 4% semiannually \(\rightarrow\) 3.96% continuous (\(q = 0.0396\)).
+*   **Maturity:** 6 months (0.5 years).
+    \[ F_0 = 25 e^{(0.10 - 0.0396) \times 0.5} = 25 e^{0.0302} = \$25.77 \]
 
-### A. Hedging with Beta ($\beta$)
+***
 
-The appropriate hedge size for an equity portfolio is determined by the portfolio's **Beta ($\beta$)**, which measures its sensitivity to the index.
+### 5.7 Valuing Forward Contracts
+It is crucial to distinguish between the **Forward Price (\(F_0\))** and the **Value of the Contract (\(f\))**.
+*   **At Inception:** The delivery price \(K\) is set equal to the current forward price \(F_0\). Therefore, the value \(f\) is **zero**.
+*   **Later:** As time passes, the market forward price \(F_0\) changes, but your contracted delivery price \(K\) stays fixed. The contract now has positive or negative value.
 
-* **Formula for Number of Contracts ($N$):**
-    $$
-    N = \beta \frac{V_A}{V_F}
-    $$
-    Where $V_A$ is the portfolio value and $V_F$ is the value of one futures contract (Futures Price $\times$ Multiplier).
+#### General Valuation Formula
+The value of a **long** forward contract (agreement to buy at \(K\)) is the present value of the difference between the current forward price and the delivery price:
+\[ f = (F_0 - K)e^{-rT} \]
 
-### B. Changing Portfolio Beta
+**Alternative Forms (Substituting \(F_0\)):**
+*   **No Income:** \( f = S_0 - Ke^{-rT} \)
+*   **Known Cash Income:** \( f = S_0 - I - Ke^{-rT} \)
+*   **Known Yield:** \( f = S_0 e^{-qT} - Ke^{-rT} \)
 
-Futures allow fund managers to adjust their market exposure **without buying or selling the underlying stocks** (which saves transaction costs):
+#### Mark-to-Market: Forwards vs. Futures
+*   **Futures:** Gains/losses are settled daily. If the price moves by \$1, you get $1 immediately.
+*   **Forwards:** Gains/losses are realized only at maturity. If the price moves by \$1, your profit is the **present value** of $1 discounted from maturity to today.
 
-| Strategy Goal | Target Beta ($\beta_T$) | Action | Purpose |
-| :--- | :--- | :--- | :--- |
-| **Complete Hedge** | $\beta_T = 0$ | **Short** $N = \beta \frac{V_A}{V_F}$ contracts | Removes all market risk; locks in return near the risk-free rate; isolates stock-specific performance (alpha). |
-| **Increase Risk** | $\beta_T > \beta$ | **Long** $N = (\beta_T - \beta) \frac{V_A}{V_F}$ contracts | Leverages the portfolio; provides immediate market exposure for a very bullish view. |
-| **Decrease Risk** | $\beta_T < \beta$ | **Short** $N = (\beta - \beta_T) \frac{V_A}{V_F}$ contracts | Reduces volatility for a moderate bearish or highly cautious outlook. |
+***
 
-## VI. Stack and Roll Strategy
+### 5.8 Forward vs. Futures Prices
+Are forward prices and futures prices theoretically identical?
+*   **Constant Interest Rates:** Yes. If \(r\) is constant, \(F_{forward} = F_{futures}\).
+*   **Stochastic Interest Rates:** No, they diverge slightly due to daily settlement (marking to market).
 
-When the required hedge period is longer than any liquid futures contract available, the hedge must be rolled forward.
+#### Correlation Argument
+The difference depends on the correlation between the **Asset Price (\(S\))** and **Interest Rates (\(r\))**.
+1.  **Positive Correlation:**
+    *   When \(S\) rises, you make a profit on futures. Since \(r\) likely rose too, you reinvest that profit at a *higher* rate.
+    *   When \(S\) falls, you lose money. Since \(r\) likely fell, you finance that loss at a *lower* rate.
+    *   *Result:* Futures are more attractive \(\rightarrow\) **Futures Price > Forward Price**.
+2.  **Negative Correlation:**
+    *   The opposite happens. You lose money when rates are high and make money when rates are low.
+    *   *Result:* Forward contracts are more attractive \(\rightarrow\) **Forward Price > Futures Price**.
 
-* **Procedure:** Enter a sequence of short-dated futures contracts. As the near contract approaches expiration, **close it out** and **immediately enter a new contract** with a later delivery month.
-* **Result:** This effectively creates a long-dated futures position by stacking a series of short ones.
-* **Primary Risk:** **Liquidity Risk** (Cash Flow Mismatch). If prices move adversely (e.g., falling in a long hedge), the daily margin calls create immediate cash outflows that may be difficult to meet, even if the long-term hedge proves profitable (as illustrated by the **Metallgesellschaft disaster**).
+*Practical Note:* For most short-term contracts (months), the difference is negligible, and we assume \(F_{forward} = F_{futures}\). The major exception is **Eurodollar Futures** (discussed in Chapter 6), where the difference is significant.
