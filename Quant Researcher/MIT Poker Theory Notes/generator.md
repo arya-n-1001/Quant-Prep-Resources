@@ -1,959 +1,179 @@
-# Chapter 6: Jointly Distributed Random Variables (Part 3)
-# Sections Covered:
-# 6.6 Order Statistics
-# 6.7 Joint Probability Distribution of Functions of Random Variables
-# 6.8 Exchangeable Random Variables
+Linear Algebra: Fundamental Operators, Decompositions, and the Geometry of Data
 
----
+1. Introduction: Matrices as Data Collections and Linear Operators
 
-# Big Picture
+In the study of linear algebra, we frequently encounter a conceptual divide. The "simple" view—often the starting point of our undergraduate journey—is that a matrix is merely a structured repository for data, a rectangular arrangement of numbers used for storage and basic arithmetic. However, the more "sophisticated" view, and the one that powers modern engineering and science, treats a matrix as a linear operator. In this capacity, a matrix does not just "sit" there; it acts upon a vector space, transforming it into another.
 
-In Parts 1 and 2, we studied:
+Defining the Data Perspective
 
-- Joint distributions
-- Marginal distributions
-- Independence
-- Conditional distributions
-- Sums of random variables
+To ground this in reality, consider a dataset representing stock prices. We can index rows by companies and columns by specific dates. The resulting matrix provides a snapshot of market behavior over time.
 
-In this final conceptual part of the chapter, we study three advanced ideas:
+Stock	July 1st	October 1st	September 1st
+Apple	400	500	420
+Morgan Stanley	500	520	510
+Google	5000	5200	5100
 
-1. How random variables behave after being sorted
-2. How to find distributions of transformed random variables
-3. How symmetry can replace independence
+Defining the Operator Perspective
 
-These concepts form the foundation of modern statistics, Bayesian inference, machine learning, reliability theory, and stochastic processes.
+From a theoretical standpoint, an m \times n matrix A defines a linear transformation T: \mathbb{R}^n \to \mathbb{R}^m. When we multiply a matrix by a vector, we are performing a mapping. Why does a collection of stock prices define a transformation? This is the central mystery we must unravel. By treating a dataset as an operator, we can apply geometric theories—rotation, scaling, and orientation—to raw numbers.
 
----
+The "So What?" Layer
 
-# 6.6 Order Statistics
+The power of this perspective lies in its ability to reveal structural stability. When we view data as an operator, we can identify which "directions" in the data are most resilient to change. To uncover these structural properties, we must identify the "anchors" of these transformations: the eigenvalues and eigenvectors.
 
----
 
-# Motivation
+--------------------------------------------------------------------------------
 
-Suppose we observe
 
-\[
-X_1,X_2,\ldots,X_n
-\]
+2. The Core Mechanism: Eigenvalues and Eigenvectors
 
-and arrange them from smallest to largest.
+Eigenvalues and eigenvectors represent the "hidden DNA" of a matrix. They provide the most simplified view of its action by identifying the directions in which the transformation is most predictable.
 
-For example,
+Formal Definition & Derivation
 
-Original sample:
+For a square n \times n matrix A, a scalar \lambda and a non-zero vector v are an eigenvalue and its corresponding eigenvector if they satisfy: Av = \lambda v
 
-\[
-7,\;3,\;9,\;1,\;5
-\]
+To solve for these, we rearrange the equation: (A - \lambda I)v = 0
 
-Sorted sample:
+For a non-trivial solution (where v \neq 0), the matrix (A - \lambda I) must not have full rank. This leads us to the characteristic equation: \det(A - \lambda I) = 0
 
-\[
-1,\;3,\;5,\;7,\;9
-\]
+The Characteristic Polynomial
 
-These ordered values are called **order statistics**.
+The determinant \det(A - \lambda I) results in a polynomial of degree n in terms of \lambda. According to the fundamental theorem of algebra, this polynomial must have n roots. It is vital to note that even for matrices containing only real numbers, these roots—the eigenvalues—may be complex.
 
----
+The "So What?" Layer
 
-# Definition
+Geometrically, an eigenvector is a special direction that remains unchanged by the transformation A, except for a scale factor. While A might rotate or skew other vectors, it only stretches or shrinks the eigenvector by the factor \lambda. This reduces a complex n-dimensional operation into simple scalar multiplication, providing a "clear view" of the matrix's behavior.
 
-For a sample
 
-\[
-X_1,\ldots,X_n
-\]
+--------------------------------------------------------------------------------
 
-the ordered values are denoted by
 
-\[
-X_{(1)}
-\le
-X_{(2)}
-\le
-\cdots
-\le
-X_{(n)}
-\]
+3. Matrix Diagonalization and the Importance of Symmetry
 
-where
+Diagonalization is a strategic method for simplifying matrix operations. By choosing a coordinate system defined by eigenvectors, the matrix acts as a simple list of scaling factors.
 
-\[
-X_{(1)}
-\]
+The Diagonalization Formula
 
-is the smallest observation and
+A matrix A is diagonalizable if there exists an invertible matrix U such that: A = UDU^{-1}
 
-\[
-X_{(n)}
-\]
+* U: A matrix whose columns are the eigenvectors of A.
+* D: A diagonal matrix where D_{ii} = \lambda_i.
 
-is the largest observation.
+In the "ideal" case where U is orthonormal (UU^T = I), the formula becomes A = UDU^T.
 
----
+Symmetric Matrices (Theorem 2)
 
-# Example
+A symmetric matrix, where A = A^T, is the gold standard in linear algebra. It possesses a beautiful theoretical property: its eigenvalues are always real.
 
-Sample:
+Proof of Real Eigenvalues:
 
-\[
-4,\;10,\;2,\;8
-\]
+1. Let Av = \lambda v.
+2. Multiply by the complex conjugate transpose (v^H) on the left: v^H Av = v^H \lambda v = \lambda \|v\|^2.
+3. Take the complex conjugate of the entire equation. Since A is real and symmetric (A = \bar{A} = A^T), we find that the left side v^H Av is equal to its own conjugate.
+4. This implies \lambda \|v\|^2 = \bar{\lambda} \|v\|^2. Since v \neq 0, we must have \lambda = \bar{\lambda}, proving \lambda is real.
 
-After ordering:
+The "So What?" Layer
 
-\[
-2,\;4,\;8,\;10
-\]
+Symmetric matrices are "ideal" because they are always orthonormally diagonalizable. In real-world engineering, symmetry ensures stability; we are guaranteed real-numbered "DNA" that we can interpret physically. When you see a symmetric matrix, you should feel a sense of control over it.
 
-Therefore
 
-\[
-X_{(1)}=2
-\]
+--------------------------------------------------------------------------------
 
-\[
-X_{(2)}=4
-\]
 
-\[
-X_{(3)}=8
-\]
+4. Singular Value Decomposition (SVD): The Universal Tool
 
-\[
-X_{(4)}=10
-\]
+While diagonalization is powerful, it is restricted to square matrices. Singular Value Decomposition (SVD) is our universal engine, capable of deconstructing any m \times n matrix.
 
----
+The SVD Theorem
 
-# Why Order Statistics Matter
+For any m \times n matrix A, there exists a decomposition: A = U \Sigma V^T Where U (m \times m) and V (n \times n) are orthonormal, and \Sigma (m \times n) is diagonal.
 
-Many important quantities are order statistics.
+Geometric Interpretation: The Two-Frame Concept
 
----
+Unlike Eigenvalue Decomposition (EVD), which works within a single frame, SVD uses two different orthonormal bases: one for the input space (V) and one for the target space (U).
 
-## Minimum
+* Orthonormal matrices (like U and V) represent rotations. As our guest speaker noted, these matrices give you the "cosines of the new coordinate system" relative to the old one.
+* The transformation is thus: Rotate (via V^T), Scale (via \Sigma), and Rotate again (via U).
 
-\[
-X_{(1)}
-\]
+The "So What?" Layer
 
-Represents:
+Why is SVD more applicable but "restricted"? It is applicable because it works for non-square data (like our stock matrix). It is "restricted" in the sense that U and V are generally different; we lose the elegance of a single coordinate frame where the matrix just "scales." However, it remains the universal tool for identifying correlations in high-dimensional data.
 
-- First failure time
-- Smallest observation
-- Worst performance
 
----
+--------------------------------------------------------------------------------
 
-## Maximum
 
-\[
-X_{(n)}
-\]
+5. Computational Methodology: SVD Step-by-Step
 
-Represents:
+The SVD algorithm relies on the symmetric matrix A^T A, which allows us to use our EVD tools to solve the SVD problem.
 
-- Largest observation
-- Maximum stress
-- Highest score
+The SVD Algorithm
 
----
+1. Compute the symmetric matrix A^T A.
+2. Find the eigenvalues (\lambda_i) and orthonormal eigenvectors (v_i) of A^T A. These v_i form the columns of V.
+3. Calculate singular values \sigma_i = \sqrt{\lambda_i}.
+4. Define u_i = Av_i / \sigma_i. These form the columns of U.
 
-## Median
+Worked Example: 2 \times 3 Matrix
 
-Middle observation.
+Given A = \begin{bmatrix} 3 & 2 & 2 \\ 2 & 3 & -2 \end{bmatrix}:
 
----
+1. A^T A: \begin{bmatrix} 13 & 12 & 2 \\ 12 & 13 & -2 \\ 2 & -2 & 8 \end{bmatrix}. Eigenvalues are \lambda_1=25, \lambda_2=9, \lambda_3=0.
+2. Singular Values: \sigma_1 = 5, \sigma_2 = 3, \sigma_3 = 0.
+3. Matrix V: Solving (A^T A - \lambda I)v=0 gives: v_1 = \begin{bmatrix} 1/\sqrt{2} \\ 1/\sqrt{2} \\ 0 \end{bmatrix}, v_2 = \begin{bmatrix} 1/\sqrt{18} \\ -1/\sqrt{18} \\ 4/\sqrt{18} \end{bmatrix}, v_3 = \begin{bmatrix} 2/3 \\ -2/3 \\ -1/3 \end{bmatrix}.
+4. Matrix U: Using u_i = Av_i / \sigma_i: u_1 = \frac{1}{5} \begin{bmatrix} 5/\sqrt{2} \\ 5/\sqrt{2} \end{bmatrix} = \begin{bmatrix} 1/\sqrt{2} \\ 1/\sqrt{2} \end{bmatrix}, u_2 = \frac{1}{3} \begin{bmatrix} 9/\sqrt{18} \\ -9/\sqrt{18} \end{bmatrix} = \begin{bmatrix} 1/\sqrt{2} \\ -1/\sqrt{2} \end{bmatrix}.
 
-## Percentiles
+Reduced SVD
 
-Examples:
+Note that \sigma_3 = 0. The third column of V and the zero components of \Sigma contribute nothing to the product. In the Reduced SVD, we drop these irrelevant dimensions. In massive datasets (e.g., 5 companies over 365 days), the computational savings from dropping low-rank information are enormous.
 
-- 25th percentile
-- 50th percentile
-- 95th percentile
 
-All are order statistics.
+--------------------------------------------------------------------------------
 
----
 
-# Joint Density of Order Statistics
+6. Advanced Property: The Perron-Frobenius Theorem
 
-Suppose
+When a matrix consists entirely of positive entries, it exhibits a unique, deep behavior governed by the Perron-Frobenius theorem.
 
-\[
-X_1,\ldots,X_n
-\]
+The Weak Form Theorem
 
-are i.i.d. continuous random variables with density
+For an n \times n matrix A (here assumed symmetric for simplicity) with strictly positive entries:
 
-\[
-f(x)
-\]
+1. There exists a unique, largest real eigenvalue \lambda_0 that dominates all others (|\lambda| < \lambda_0).
+2. The corresponding eigenvector has strictly positive entries.
+3. The multiplicity of \lambda_0 is 1.
 
-Then
+The "So What?" Layer
 
-\[
-f_{X_{(1)},\ldots,X_{(n)}}
-(x_1,\ldots,x_n)
-=
-n!
-f(x_1)f(x_2)\cdots f(x_n)
-\]
+This theorem is the bridge to the Steve Ross Recovery Theorem in finance and the study of Markov Chains in probability. It guarantees that in positive systems, there is a single "dominant" state or direction that the system will inevitably favor. It is a profound result: the mere fact that all entries are positive dictates the existence of a unique, stable primary direction.
 
-for
 
-\[
-x_1<x_2<\cdots<x_n
-\]
+--------------------------------------------------------------------------------
 
-and zero otherwise. :contentReference[oaicite:0]{index=0}
 
----
+7. Synthesis and Key Takeaways
 
-# Why Does the Factor \(n!\) Appear?
+We have moved from raw numbers to structural understanding. By decomposing a matrix, you aren't just doing arithmetic; you are performing a "dissection" of the data's geometry.
 
-Suppose the ordered values are
+Essential Concepts & Formulas
 
-\[
-x_1<x_2<\cdots<x_n
-\]
+* EVD: A = UDU^{-1} (Requires square, diagonalizable).
+* SVD: A = U\Sigma V^T (The universal engineer's tool).
+* Orthonormal Properties: UU^T = I; preserves lengths, represents pure rotation.
 
-Before sorting, these values could have appeared in
+Common Pitfalls
 
-\[
-n!
-\]
+* Normalizing: Forgetting to normalize eigenvectors to unit length (norm = 1) when constructing U and V.
+* Complex Values: Expecting real eigenvalues for non-symmetric matrices.
+* Rank: Ignoring that many real-world matrices have a "low rank," meaning most of the singular values are zero or negligible.
 
-different orders.
+Exam-Level Mastery Checklist
 
-Each ordering contributes equally.
+* [ ] Can you derive (A - \lambda I)v = 0?
+* [ ] Can you prove that symmetric matrices have real eigenvalues using complex conjugates?
+* [ ] Can you manually execute the SVD algorithm for a small matrix?
+* [ ] Can you explain the geometric role of U and V as "cosines of the new coordinate system"?
 
-Therefore the density is multiplied by
-
-\[
-n!
-\]
-
----
-
-# Distribution of the j-th Order Statistic
-
-One of the most important formulas in this section.
-
-The density of
-
-\[
-X_{(j)}
-\]
-
-is
-
-\[
-f_{X_{(j)}}(x)
-=
-\frac{n!}
-{(j-1)!(n-j)!}
-[F(x)]^{j-1}
-[1-F(x)]^{n-j}
-f(x)
-\]
-
-:contentReference[oaicite:1]{index=1}
-
----
-
-# Understanding the Formula
-
-For
-
-\[
-X_{(j)}=x
-\]
-
-we require:
-
-- \(j-1\) observations below \(x\)
-- One observation at \(x\)
-- \(n-j\) observations above \(x\)
-
-Each term corresponds exactly to this requirement.
-
----
-
-# Minimum Distribution
-
-The minimum is
-
-\[
-X_{(1)}
-\]
-
-To have
-
-\[
-X_{(1)}>x
-\]
-
-all observations must exceed \(x\).
-
-Thus
-
-\[
-P(X_{(1)}>x)
-=
-[1-F(x)]^n
-\]
-
-Therefore
-
-\[
-F_{X_{(1)}}(x)
-=
-1-[1-F(x)]^n
-\]
-
----
-
-# Maximum Distribution
-
-The maximum is
-
-\[
-X_{(n)}
-\]
-
-To have
-
-\[
-X_{(n)}\le x
-\]
-
-all observations must be less than \(x\).
-
-Hence
-
-\[
-F_{X_{(n)}}(x)
-=
-[F(x)]^n
-\]
-
----
-
-# Important Insight
-
-As sample size increases:
-
-- The minimum moves left
-- The maximum moves right
-
-The sample becomes more spread out.
-
----
-
-# Sample Median
-
-For a sample size
-
-\[
-2m+1
-\]
-
-the median is
-
-\[
-X_{(m+1)}
-\]
-
-the middle observation.
-
----
-
-# Range
-
-The range is defined as
-
-\[
-R
-=
-X_{(n)}
--
-X_{(1)}
-\]
-
----
-
-# Interpretation
-
-Largest value minus smallest value.
-
-Measures overall spread.
-
----
-
-# Example
-
-Data:
-
-\[
-3,\;7,\;11,\;20
-\]
-
-Range:
-
-\[
-20-3
-=
-17
-\]
-
----
-
-# Applications of Order Statistics
-
-Used heavily in:
-
-- Reliability theory
-- Quality control
-- Survival analysis
-- Statistical estimation
-- Risk management
-
----
-
-# 6.7 Joint Probability Distribution of Functions of Random Variables
-
----
-
-# Motivation
-
-Frequently we are not interested in the original variables.
-
-Instead we care about functions of them.
-
-Examples:
-
-\[
-Y=X_1+X_2
-\]
-
-Total profit.
-
----
-
-\[
-Y=X_1-X_2
-\]
-
-Difference in scores.
-
----
-
-\[
-Y_1=X_1+X_2
-\]
-
-\[
-Y_2=X_1-X_2
-\]
-
-Sum and difference.
-
----
-
-Question:
-
-> How do we find the distribution of the transformed variables?
-
----
-
-# Change of Variables
-
-Suppose
-
-\[
-Y_1=g_1(X_1,X_2)
-\]
-
-\[
-Y_2=g_2(X_1,X_2)
-\]
-
-and we know the joint density of
-
-\[
-X_1,X_2
-\]
-
-We want the joint density of
-
-\[
-Y_1,Y_2
-\]
-
----
-
-# The Jacobian
-
-The key tool is the Jacobian determinant.
-
-\[
-J
-=
-\begin{vmatrix}
-\dfrac{\partial y_1}{\partial x_1}
-&
-\dfrac{\partial y_1}{\partial x_2}
-\\[1ex]
-\dfrac{\partial y_2}{\partial x_1}
-&
-\dfrac{\partial y_2}{\partial x_2}
-\end{vmatrix}
-\]
-
----
-
-# Transformation Formula
-
-If the transformation is one-to-one,
-
-\[
-f_{Y_1,Y_2}(y_1,y_2)
-=
-f_{X_1,X_2}(x_1,x_2)
-|J|^{-1}
-\]
-
-where \(x_1,x_2\) are expressed in terms of \(y_1,y_2\). :contentReference[oaicite:2]{index=2}
-
----
-
-# Interpretation
-
-The Jacobian measures how much area is stretched or compressed.
-
-Probability mass stays constant.
-
-Density changes to compensate.
-
----
-
-# Classic Example
-
-Define
-
-\[
-Y_1=X_1+X_2
-\]
-
-\[
-Y_2=X_1-X_2
-\]
-
-Then
-
-\[
-J
-=
-\begin{vmatrix}
-1 & 1\\
-1 & -1
-\end{vmatrix}
-=
--2
-\]
-
-Thus
-
-\[
-|J|=2
-\]
-
-and
-
-\[
-f_{Y_1,Y_2}(y_1,y_2)
-=
-\frac12
-f_{X_1,X_2}
-\left(
-\frac{y_1+y_2}{2},
-\frac{y_1-y_2}{2}
-\right)
-\]
-
-:contentReference[oaicite:3]{index=3}
-
----
-
-# Why This Example Matters
-
-Many advanced transformations reduce to this same pattern.
-
-Examples:
-
-- Sample mean and deviations
-- Sum and difference
-- Principal components
-- Linear transformations
-
----
-
-# Polar Coordinate Transformation
-
-Suppose
-
-\[
-X=R\cos\Theta
-\]
-
-\[
-Y=R\sin\Theta
-\]
-
-Then
-
-\[
-|J|=R
-\]
-
-This explains why polar-coordinate integrals contain an extra factor \(R\).
-
----
-
-# Multivariable Version
-
-For
-
-\[
-X_1,\ldots,X_n
-\]
-
-and
-
-\[
-Y_1,\ldots,Y_n
-\]
-
-the Jacobian becomes
-
-\[
-J
-=
-\det
-\left[
-\frac{\partial y_i}
-{\partial x_j}
-\right]
-\]
-
-and
-
-\[
-f_Y(y)
-=
-f_X(x)|J|^{-1}
-\]
-
-:contentReference[oaicite:4]{index=4}
-
----
-
-# Important Applications
-
-Transformation methods are used to derive:
-
-- Gamma distribution
-- Chi-square distribution
-- Beta distribution
-- Sampling distributions
-- Multivariate normal results
-
----
-
-# Example: Sum of Exponential Variables
-
-Let
-
-\[
-Y_n=X_1+\cdots+X_n
-\]
-
-where the \(X_i\) are i.i.d. exponential.
-
-Using transformations one obtains
-
-\[
-f_{Y_n}(y)
-=
-\frac{\lambda^n y^{n-1}}
-{(n-1)!}
-e^{-\lambda y}
-\]
-
-which is the Gamma distribution. :contentReference[oaicite:5]{index=5}
-
----
-
-# 6.8 Exchangeable Random Variables
-
----
-
-# Motivation
-
-So far we have heavily used independence.
-
-But many real systems are not independent.
-
-Still, they may possess symmetry.
-
-This leads to the concept of exchangeability.
-
----
-
-# Definition
-
-Random variables
-
-\[
-X_1,X_2,\ldots,X_n
-\]
-
-are said to be **exchangeable** if their joint distribution remains unchanged under every permutation.
-
-In other words,
-
-\[
-(X_1,X_2,\ldots,X_n)
-\]
-
-has the same joint distribution as
-
-\[
-(X_{i_1},X_{i_2},\ldots,X_{i_n})
-\]
-
-for every permutation
-
-\[
-(i_1,i_2,\ldots,i_n)
-\]
-
-of
-
-\[
-(1,2,\ldots,n)
-\]
-
-:contentReference[oaicite:6]{index=6}
-
----
-
-# Intuition
-
-Exchangeability means:
-
-> The labels do not matter.
-
-Only the collection of values matters.
-
----
-
-# Example: Fair Coin Tosses
-
-Let
-
-\[
-X_i=
-\begin{cases}
-1,&\text{Head}\\
-0,&\text{Tail}
-\end{cases}
-\]
-
-for independent fair tosses.
-
-Then
-
-\[
-(X_1,X_2,X_3)
-\]
-
-and
-
-\[
-(X_3,X_1,X_2)
-\]
-
-have exactly the same distribution.
-
-Thus they are exchangeable.
-
----
-
-# Relationship with Independence
-
-Every i.i.d. collection is exchangeable.
-
-Therefore
-
-\[
-\text{i.i.d.}
-\implies
-\text{Exchangeable}
-\]
-
----
-
-# Very Important
-
-The converse is FALSE.
-
-\[
-\text{Exchangeable}
-\nRightarrow
-\text{Independent}
-\]
-
----
-
-# Counterexample
-
-Suppose:
-
-With probability
-
-\[
-\frac12
-\]
-
-all variables equal 0.
-
-With probability
-
-\[
-\frac12
-\]
-
-all variables equal 1.
-
-Then
-
-\[
-(X_1,\ldots,X_n)
-\]
-
-is exchangeable because order does not matter.
-
-However,
-
-\[
-X_1,\ldots,X_n
-\]
-
-are clearly not independent.
-
-Knowing one variable immediately reveals all others.
-
----
-
-# Why Exchangeability Is Important
-
-Exchangeability appears naturally when:
-
-- Individuals are sampled from the same population
-- Labels carry no meaning
-- Symmetry assumptions are reasonable
-
----
-
-# Applications
-
-Exchangeability plays a major role in:
-
-- Bayesian statistics
-- de Finetti's theorem
-- Machine learning
-- Reliability theory
-- Random graph models
-
----
-
-# Exchangeability vs Independence
-
-| Property | Independent | Exchangeable |
-|-----------|------------|-------------|
-| Labels irrelevant | Yes | Yes |
-| Variables affect each other | No | Possibly |
-| Joint distribution factors | Yes | Not necessarily |
-| Stronger condition | Yes | No |
-
----
-
-# Chapter 6 Final Conceptual Summary
-
-The chapter can be viewed as answering four major questions:
-
----
-
-## Question 1
-
-How do multiple random variables behave together?
-
-Answer:
-
-- Joint distributions
-- Marginal distributions
-- Independence
-
----
-
-## Question 2
-
-How does information about one variable affect another?
-
-Answer:
-
-- Conditional distributions
-- Conditional probabilities
-
----
-
-## Question 3
-
-How do we create new random variables from old ones?
-
-Answer:
-
-- Sums
-- Transformations
-- Jacobians
-
----
-
-## Question 4
-
-What special structures arise among many variables?
-
-Answer:
-
-- Order statistics
-- Exchangeability
-
----
-
-# Key Takeaway
-
-Part 3 introduces two of the deepest ideas in probability:
-
-1. **Order statistics**, which allow us to study minima, maxima, medians, ranges, and percentiles.
-
-2. **Transformations and Jacobians**, which allow us to derive distributions of complicated random variables from simpler ones.
-
-3. **Exchangeability**, which captures symmetry among random variables and serves as a bridge between independence and modern Bayesian probability.
-
-Together, these ideas form the mathematical foundation for statistical inference, machine learning, reliability analysis, and advanced probability theory.
+Linear algebra is no longer a classroom abstraction; it is the universal tool for deconstructing the complexity of the modern world. Use your imagination to see the geometry behind the data.
+ 
